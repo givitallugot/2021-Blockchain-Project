@@ -1,0 +1,33 @@
+---
+title: "Rose Sampling"
+author: "SUNMI JU"
+date: "6/17/2021"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ROSE)
+
+Train001 <- read.csv('./Data/Train001.csv')
+
+# Over Sampling
+
+# Minority Class: Normal, Theft, Reconnaissance
+# Majority Class: DDos, Dos
+
+Train001$category_mm <- ifelse(Train001$category %in% c("DDoS", 'DoS'), 'major', 'minor')
+
+N120 <- round(59131 * 1.2, 0)
+Train001_ROSE_1 <- ovun.sample(category_mm~., data = Train001, method = "both", p=0.3, N = N120)$data
+table(Train001_ROSE_1$category_mm)
+table(Train001_ROSE_1$category)
+prop.table(matrix(table(Train001_ROSE_1$category)))
+
+# write.csv(Train001_ROSE_1, './desktop/EWHAG/2021-1/블록체인의기초/프로젝트/Data/Train001_ROSE_1.csv', row.names = FALSE)
+
+```
+
